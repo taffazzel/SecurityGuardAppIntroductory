@@ -878,11 +878,23 @@
             const result = await response.json();
 
             if (response.ok) {
-                message.textContent =
-                    "Your administrator account has been created successfully. You can now sign in to the mobile app.";
-                message.className = "success";
-                form.reset();
-            } else {
+                    message.innerHTML = `
+                        <strong>✅ Registration Successful!</strong><br>
+                        Your administrator account has been created successfully.
+                        You can now sign in to the Security Guard Tracker mobile application.
+                    `;
+                
+                    message.className = "success";
+                    message.style.display = "block";
+                
+                    // Scroll the success message into view
+                    message.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                
+                    form.reset();
+                } else {
                 message.textContent =
                     result.message || "Registration failed.";
                 message.className = "error";
