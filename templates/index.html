@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Data Glean Security Guard Tracker</title>
+
+    <style>
+        :root {
+            --navy: #0e2f5f;
+            --navy-dark: #091f43;
+            --blue: #2874df;
+            --blue-light: #e8f1ff;
+            --background: #f5f6fb;
+            --text: #111827;
+            --muted: #697386;
+            --border: #dde3ec;
+            --green: #159c72;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: 0 auto;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+        }
+
+        .nav {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: var(--text);
+        }
+
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            background: linear-gradient(145deg, #2c80eb, #2163c8);
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 8px 22px rgba(40, 116, 223, 0.25);
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #374151;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .nav-button {
+            background: var(--blue);
+            color: white !important;
+            padding: 11px 18px;
+            border-radius: 10px;
+        }
+
+        .hero {
+            padding: 75px 0 80px;
+            background:
+                radial-gradient(circle at 15% 10%, #dceaff, transparent 32%),
+                radial-gradient(circle at 90% 25%, #e6edff, transparent 30%),
+                linear-gradient(145deg, #f8faff, #eef3fc);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.08fr 0.92fr;
+            gap: 55px;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--blue-light);
+            color: #1f5fc1;
+            padding: 9px 15px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            font-size: clamp(44px, 6vw, 70px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            color: #101b31;
+        }
+
+        .hero-copy > p {
+            font-size: 19px;
+            color: #526078;
+            max-width: 680px;
+            margin-bottom: 31px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .primary-button,
+        .secondary-button {
+            padding: 14px 21px;
+            border-radius: 11px;
+            font-weight: 800;
+            display: inline-block;
+        }
+
+        .primary-button {
+            background: var(--blue);
+            color: white;
+            box-shadow: 0 10px 24px rgba(40, 116, 223, 0.24);
+        }
+
+        .secondary-button {
+            color: var(--navy);
+            background: white;
+            border: 1px solid #cfd8e7;
+        }
+
+        .trust-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            color: #536176;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .trust-row span::before {
+            content: "â";
+            color: var(--green);
+            margin-right: 7px;
+            font-weight: 900;
+        }
+
+        .hero-panel {
+            background: linear-gradient(145deg, var(--navy-dark), #17467f);
+            border-radius: 30px;
+            padding: 31px;
+            color: white;
+            box-shadow: 0 28px 70px rgba(14, 47, 95, 0.28);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            width: 270px;
+            height: 270px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            top: -100px;
+            right: -70px;
+        }
+
+        .hero-panel h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-panel > p {
+            color: #c8d8ee;
+            margin-bottom: 26px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 13px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mini-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 17px;
+            border-radius: 16px;
+        }
+
+        .mini-card strong {
+            display: block;
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .mini-card span {
+            color: #bfd0e8;
+            font-size: 13px;
+        }
+
+        .section {
+            padding: 90px 0;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto 48px;
+        }
+
+        .section-heading span {
+            color: var(--blue);
+            font-weight: 800;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(34px, 4vw, 48px);
+            line-height: 1.15;
+            margin: 10px 0 15px;
+            color: #111b31;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 27px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: var(--blue-light);
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .preview-section {
+            background: #edf2fa;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+            align-items: start;
+        }
+
+        .preview-card {
+            background: white;
+            border-radius: 25px;
+            border: 1px solid #d9e1ed;
+            padding: 27px;
+            box-shadow: 0 18px 45px rgba(14, 47, 95, 0.09);
+        }
+
+        .preview-card h3 {
+            font-size: 26px;
+            margin-bottom: 8px;
+            color: var(--navy-dark);
+        }
+
+        .preview-card p {
+            color: var(--muted);
+            margin-bottom: 22px;
+        }
+
+        .phone-frame {
+            max-width: 360px;
+            margin: 0 auto;
+            padding: 10px;
+            border-radius: 35px;
+            background: #111827;
+            box-shadow: 0 22px 50px rgba(15, 23, 42, 0.28);
+        }
+
+        .phone-frame img {
+            width: 100%;
+            display: block;
+            border-radius: 27px;
+        }
+
+        .registration-section {
+            background:
+                radial-gradient(circle at 10% 20%, #1d4f8c, transparent 35%),
+                linear-gradient(145deg, #081f43, #123d73);
+            color: white;
+        }
+
+        .registration-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 55px;
+            align-items: center;
+        }
+
+        .registration-copy h2 {
+            font-size: clamp(35px, 4vw, 51px);
+            line-height: 1.12;
+            margin-bottom: 18px;
+        }
+
+        .registration-copy p {
+            color: #c9d7eb;
+            font-size: 18px;
+            margin-bottom: 26px;
+        }
+
+        .registration-points {
+            display: grid;
+            gap: 13px;
+        }
+
+        .registration-points div {
+            display: flex;
+            gap: 11px;
+            color: #dce7f6;
+        }
+
+        .registration-points strong {
+            color: #5ee0b6;
+        }
+
+        .form-card {
+            background: white;
+            color: var(--text);
+            border-radius: 25px;
+            padding: 34px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.28);
+        }
+
+        .form-card h3 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .form-card .intro {
+            color: var(--muted);
+            margin-bottom: 23px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            background: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(40, 116, 223, 0.13);
+        }
+
+        button {
+            width: 100%;
+            border: 0;
+            border-radius: 11px;
+            padding: 14px;
+            background: linear-gradient(135deg, #2f7be5, #215dcc);
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        #message {
+            display: none;
+            margin-top: 17px;
+            padding: 13px;
+            border-radius: 10px;
+        }
+
+        .success {
+            display: block !important;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            display: block !important;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        footer {
+            background: #07172f;
+            color: #bdc9dc;
+            padding: 38px 0;
+        }
+
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            color: white;
+            font-weight: 800;
+            letter-spacing: 3px;
+        }
+
+        @media (max-width: 950px) {
+            .hero-grid,
+            .registration-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .nav-links a:not(.nav-button) {
+                display: none;
+            }
+
+            .brand-name {
+                font-size: 16px;
+                letter-spacing: 2px;
+            }
+
+            .hero {
+                padding-top: 50px;
+            }
+
+            .features-grid,
+            .mini-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 65px 0;
+            }
+
+            .footer-row {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="container nav">
+        <a href="#" class="brand">
+            <div class="brand-icon">â¥</div>
+            <div class="brand-name">DATA GLEAN</div>
+        </a>
+
+        <nav class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#preview">App preview</a>
+            <a href="#register" class="nav-button">Create account</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+
+    <section class="hero">
+        <div class="container hero-grid">
+
+            <div class="hero-copy">
+                <div class="badge">Security business management platform</div>
+
+                <h1>Safer shifts. Clearer operations.</h1>
+
+                <p>
+                    Data Glean Security Guard Tracker gives security businesses
+                    one connected platform for managing guards, workplaces,
+                    schedules, attendance, incidents, communication and live
+                    operational visibility.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#register" class="primary-button">
+                        Create an admin account
+                    </a>
+
+                    <a href="#preview" class="secondary-button">
+                        View the mobile app
+                    </a>
+                </div>
+
+                <div class="trust-row">
+                    <span>Admin and guard access</span>
+                    <span>Mobile-first experience</span>
+                    <span>Secure workforce management</span>
+                </div>
+            </div>
+
+            <div class="hero-panel">
+                <h2>Everything your security operation needs</h2>
+
+                <p>
+                    Coordinate your workforce from one clear and modern command centre.
+                </p>
+
+                <div class="mini-grid">
+                    <div class="mini-card">
+                        <strong>Live Guards</strong>
+                        <span>Track workforce activity and presence.</span>
+                    </div>
+
+                    <div class="mini-card">
+                        <strong>Workplaces</strong>
+                        <span>Manage operational sites and assignments.</span>
+                    </div>
+
+                    <div class="mini-card">
+                        <strong>Schedules</strong>
+                        <span>Plan and monitor security shifts.</span>
+                    </div>
+
+                    <div class="mini-card">
+                        <strong>Incidents</strong>
+                        <span>Record and review operational alerts.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="container">
+
+            <div class="section-heading">
+                <span>Platform capabilities</span>
+                <h2>One system for administrators and guards</h2>
+                <p>
+                    Give managers operational control while providing guards with
+                    the tools they need throughout every shift.
+                </p>
+            </div>
+
+            <div class="features-grid">
+
+                <article class="feature-card">
+                    <div class="feature-icon">i ½i±¥</div>
+                    <h3>Guard administration</h3>
+                    <p>
+                        Onboard, activate, suspend, reactivate and offboard guard
+                        accounts from a central administration area.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">i ½i³</div>
+                    <h3>Live guard tracking</h3>
+                    <p>
+                        Improve operational visibility by viewing guard activity
+                        and workplace presence in real time.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">i ¼i¿¢</div>
+                    <h3>Workplace management</h3>
+                    <p>
+                        Create security sites, maintain workplace information and
+                        assign guards to the right locations.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">i ½i³</div>
+                    <h3>Shift scheduling</h3>
+                    <p>
+                        Organise shifts, communicate assignments and give guards
+                        a clear view of their working schedule.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">â</div>
+                    <h3>GPS and verification</h3>
+                    <p>
+                        Support attendance verification using location-aware
+                        processes designed for security workplaces.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">i ½iº¨</div>
+                    <h3>Incident and SOS reporting</h3>
+                    <p>
+                        Allow guards to record incidents, raise alerts and
+                        communicate urgent operational information.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section preview-section" id="preview">
+        <div class="container">
+
+            <div class="section-heading">
+                <span>Mobile application</span>
+                <h2>Designed around real security operations</h2>
+                <p>
+                    Administrators receive a command-centre view, while guards
+                    receive a focused workspace for their daily responsibilities.
+                </p>
+            </div>
+
+            <div class="preview-grid">
+
+                <article class="preview-card">
+                    <h3>Guard workspace</h3>
+                    <p>
+                        Guards can access shifts, verification, incident reporting,
+                        emergency alerts, messages, timesheets and holiday plans.
+                    </p>
+
+                    <div class="phone-frame">
+                        <img
+                            src="{{ url_for('static', filename='images/guard-dashboard.jpeg') }}"
+                            alt="Data Glean Security Guard Tracker guard dashboard"
+                        >
+                    </div>
+                </article>
+
+                <article class="preview-card">
+                    <h3>Admin command centre</h3>
+                    <p>
+                        Administrators can manage guards, schedules, workplaces,
+                        assignments, alerts, live tracking, reviews and workforce plans.
+                    </p>
+
+                    <div class="phone-frame">
+                        <img
+                            src="{{ url_for('static', filename='images/admin-dashboard.jpeg') }}"
+                            alt="Data Glean Security Guard Tracker administrator dashboard"
+                        >
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section registration-section" id="register">
+        <div class="container registration-grid">
+
+            <div class="registration-copy">
+                <h2>Start managing your security workforce</h2>
+
+                <p>
+                    Create your organisation administrator account and use the
+                    same credentials to sign in to the Data Glean Security Guard
+                    Tracker mobile application.
+                </p>
+
+                <div class="registration-points">
+                    <div><strong>â</strong> Immediate administrator access</div>
+                    <div><strong>â</strong> Secure password storage</div>
+                    <div><strong>â</strong> Profile photo included</div>
+                    <div><strong>â</strong> Ready to manage guards and workplaces</div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h3>Create an admin account</h3>
+
+                <p class="intro">
+                    Complete the form below to set up your administrator profile.
+                </p>
+
+                <form id="registrationForm" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <label for="full_name">Full name</label>
+                        <input
+                            type="text"
+                            id="full_name"
+                            name="full_name"
+                            autocomplete="name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile_photo">Profile photo</label>
+                        <input
+                            type="file"
+                            id="profile_photo"
+                            name="profile_photo"
+                            accept="image/jpeg,image/png"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" id="submitButton">
+                        Create admin account
+                    </button>
+                </form>
+
+                <div id="message"></div>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="container footer-row">
+        <div>Safer shifts. Clearer operations.</div>
+        <div class="footer-brand">DATA GLEAN</div>
+    </div>
+</footer>
+
+<script>
+    const form = document.getElementById("registrationForm");
+    const message = document.getElementById("message");
+    const submitButton = document.getElementById("submitButton");
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        message.className = "";
+        message.style.display = "none";
+        message.textContent = "";
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Creating account...";
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch("/register-admin", {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                message.textContent =
+                    "Your administrator account has been created successfully. You can now sign in to the mobile app.";
+                message.className = "success";
+                form.reset();
+            } else {
+                message.textContent =
+                    result.message || "Registration failed.";
+                message.className = "error";
+            }
+        } catch (error) {
+            message.textContent =
+                "Unable to connect to the registration service.";
+            message.className = "error";
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = "Create admin account";
+        }
+    });
+</script>
+
+</body>
+</html>
