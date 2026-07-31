@@ -1,10 +1,19 @@
-from flask import Flask, render_template, request, jsonify
+import os
+
+from flask import Flask, jsonify, render_template, request
+from dotenv import load_dotenv
 import requests
 
 
-app = Flask(__name__)
+load_dotenv()
 
-REGISTRATION_API_URL = "http://127.0.0.1:7001/public/register-admin"
+app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 6 * 1024 * 1024
+
+REGISTRATION_API_URL = os.getenv(
+    "REGISTRATION_API_URL",
+    "http://127.0.0.1:8000/public/register-admin",
+)
 
 
 @app.route("/")
@@ -14,16 +23,31 @@ def home():
 
 @app.route("/register-admin", methods=["POST"])
 def register_admin():
+    organisation_name = request.form.get(
+        "organisation_name",
+        "",
+    ).strip()
     full_name = request.form.get("full_name", "").strip()
     email = request.form.get("email", "").strip()
     password = request.form.get("password", "")
     profile_photo = request.files.get("profile_photo")
 
-    if not all([full_name, email, password, profile_photo]):
+    if not all(
+        [
+            organisation_name,
+            full_name,
+            email,
+            password,
+            profile_photo,
+        ]
+    ):
         return jsonify(
             {
                 "success": False,
-                "message": "All fields are required.",
+                "message": (
+                    "Organisation name, full name, email, password "
+                    "and profile photo are required."
+                ),
             }
         ), 400
 
@@ -36,6 +60,7 @@ def register_admin():
     }
 
     data = {
+        "organisation_name": organisation_name,
         "full_name": full_name,
         "email": email,
         "password": password,
@@ -67,7 +92,9 @@ def register_admin():
         return jsonify(
             {
                 "success": True,
-                "message": "Admin account created successfully.",
+                "message": (
+                    "Organisation and admin account created successfully."
+                ),
                 "user": response_data,
             }
         ), 201
@@ -84,4 +111,5 @@ def register_admin():
 
 
 if __name__ == "__main__":
+    print(f"Registration API: {REGISTRATION_API_URL}")
     app.run(host="0.0.0.0", port=5002, debug=False)
