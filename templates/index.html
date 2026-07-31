@@ -1162,12 +1162,13 @@
                     <div class="eyebrow" style="color:#9fc5ff;">Public registration</div>
                     <h2>Create your administrator account</h2>
                     <p>
-                        Register below, then use the same credentials to sign in to the
-                        Security Guard Tracker mobile application.
+                        Register your organisation below, then use the same credentials
+                        to sign in to the Security Guard Tracker mobile application.
                     </p>
 
                     <div class="registration-points">
-                        <div class="registration-point"><span class="check">OK</span> Immediate administrator access</div>
+                        <div class="registration-point"><span class="check">OK</span> Seven-day organisation trial</div>
+                        <div class="registration-point"><span class="check">OK</span> Up to three guards</div>
                         <div class="registration-point"><span class="check">OK</span> Secure password handling</div>
                         <div class="registration-point"><span class="check">OK</span> Profile photo included</div>
                         <div class="registration-point"><span class="check">OK</span> Ready to manage guards and workplaces</div>
@@ -1180,6 +1181,19 @@
 
                     <form id="registrationForm" enctype="multipart/form-data">
                         <div class="form-grid">
+                            <div class="form-group full">
+                                <label for="organisation_name">Organisation name</label>
+                                <input
+                                    type="text"
+                                    id="organisation_name"
+                                    name="organisation_name"
+                                    autocomplete="organization"
+                                    maxlength="200"
+                                    placeholder="Enter your organisation name"
+                                    required
+                                >
+                            </div>
+
                             <div class="form-group full">
                                 <label for="full_name">Full name</label>
                                 <input
@@ -1230,12 +1244,12 @@
                         </div>
 
                         <button type="submit" id="submitButton" class="submit-button">
-                            Create admin account
+                            Start seven-day trial
                         </button>
                     </form>
 
                     <div id="message" role="status" aria-live="polite"></div>
-                    <p class="form-note">Your details are used only to create your administrator profile.</p>
+                    <p class="form-note">One private organisation workspace is created for your seven-day trial. Trial access supports up to three guards.</p>
                 </div>
             </div>
         </section>
@@ -1255,6 +1269,7 @@
 
         form.addEventListener("submit", async function (event) {
             event.preventDefault();
+            let registrationSucceeded = false;
 
             message.className = "";
             message.style.display = "none";
@@ -1279,11 +1294,19 @@
                 }
 
                 if (response.ok) {
-                    message.innerHTML = `
-                        <strong>✅ Registration Successful!</strong><br><br>
-                        Your administrator account has been created successfully.
-                        You can now sign in to the <strong>Security Guard Tracker</strong> mobile application.
-                    `;
+                    registrationSucceeded = true;
+                    const organisation =
+                        result.user && result.user.organisation
+                            ? result.user.organisation
+                            : {};
+                    const organisationName =
+                        organisation.name || "Your organisation";
+
+                    message.textContent =
+                        `Registration successful. ${organisationName} and your ` +
+                        "administrator account have been created. Your seven-day " +
+                        "trial supports up to three guards. You can now sign in " +
+                        "to the Security Guard Tracker mobile application.";
 
                     message.className = "success";
                     message.style.display = "block";
@@ -1299,21 +1322,33 @@
                     inputs.forEach(input => input.disabled = true);
 
                     submitButton.disabled = true;
-                    submitButton.textContent = "✓ Account Created";
+                    submitButton.textContent = "✓ Trial Created";
 
                 } else {
                     message.textContent =
                         result.message ||
                         "Registration failed. Please check your details and try again.";
                     message.className = "error";
+                    message.style.display = "block";
+                    message.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
                 }
             } catch (error) {
                 message.textContent =
                     "Unable to connect to the registration service. Please try again.";
                 message.className = "error";
+                message.style.display = "block";
+                message.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
             } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = "Create admin account";
+                if (!registrationSucceeded) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Start seven-day trial";
+                }
             }
         });
     </script>
