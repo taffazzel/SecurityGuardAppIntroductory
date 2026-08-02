@@ -57,7 +57,8 @@
         }
 
         button,
-        input {
+        input,
+        select {
             font: inherit;
         }
 
@@ -688,7 +689,8 @@
             font-weight: 800;
         }
 
-        input {
+        input,
+        select {
             width: 100%;
             min-height: 48px;
             border: 1px solid #cbd5e1;
@@ -699,7 +701,8 @@
             font-size: 15px;
         }
 
-        input:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: var(--blue-600);
             box-shadow: 0 0 0 4px rgba(47, 118, 229, 0.12);
@@ -718,6 +721,108 @@
             background: var(--blue-100);
             font-weight: 800;
             cursor: pointer;
+        }
+
+        .plan-picker {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .plan-option {
+            position: relative;
+            min-height: 112px;
+            padding: 15px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: border-color .2s ease, background .2s ease, transform .2s ease;
+        }
+
+        .plan-option:hover {
+            transform: translateY(-2px);
+            border-color: #a8c3ee;
+        }
+
+        .plan-option.selected {
+            border: 2px solid var(--blue-600);
+            padding: 14px;
+            background: var(--blue-100);
+            box-shadow: 0 8px 22px rgba(47, 118, 229, .12);
+        }
+
+        .plan-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .plan-option strong,
+        .plan-option span,
+        .plan-option small {
+            display: block;
+        }
+
+        .plan-option strong {
+            color: var(--navy-950);
+            font-size: 16px;
+        }
+
+        .plan-option span {
+            margin: 4px 0;
+            color: var(--blue-700);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .plan-option small {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.35;
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 3px 7px;
+            border-radius: 999px;
+            color: #166534;
+            background: #dcfce7;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .selection-summary {
+            margin-bottom: 18px;
+            padding: 13px 14px;
+            border-left: 4px solid var(--blue-600);
+            border-radius: 10px;
+            color: #344054;
+            background: #f1f6ff;
+            font-size: 13px;
+        }
+
+        .hidden-field { display: none !important; }
+
+        .consent-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 2px 0 17px;
+            color: #526074;
+            font-size: 12px;
+        }
+
+        .consent-row input {
+            width: 17px;
+            min-height: 17px;
+            margin-top: 2px;
+            accent-color: var(--blue-600);
         }
 
         .submit-button {
@@ -882,6 +987,10 @@
             .form-card {
                 padding: 24px;
             }
+
+            .plan-picker {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -906,7 +1015,7 @@
                 <a href="#features">Features</a>
                 <a href="#app-preview">App preview</a>
                 <a href="#how-it-works">How it works</a>
-                <a href="#register" class="nav-cta">Create account</a>
+                <a href="#register" class="nav-cta">Choose a plan</a>
             </nav>
         </div>
     </header>
@@ -923,7 +1032,7 @@
                     </p>
 
                     <div class="hero-actions">
-                        <a href="#register" class="button button-primary">Create an admin account</a>
+                        <a href="#register" class="button button-primary">Choose a plan</a>
                         <a href="#app-preview" class="button button-secondary">Explore the mobile app</a>
                     </div>
 
@@ -1094,7 +1203,7 @@
                         <div class="phone-stage">
                             <div class="phone-frame">
                                 <img
-                                    src="{{ url_for('static', filename='images/guard-dashboard.jpeg') }}"
+                                    src="{{ url_for('static', filename='image/guard-dashboard.jpeg') }}"
                                     alt="Security Guard Tracker guard dashboard"
                                 >
                             </div>
@@ -1110,7 +1219,7 @@
                         <div class="phone-stage">
                             <div class="phone-frame">
                                 <img
-                                    src="{{ url_for('static', filename='images/admin-dashboard.jpeg') }}"
+                                    src="{{ url_for('static', filename='image/admin-dashboard.jpeg') }}"
                                     alt="Security Guard Tracker administrator dashboard"
                                 >
                             </div>
@@ -1131,20 +1240,20 @@
                 <div class="steps">
                     <article class="step">
                         <div class="step-number">1</div>
-                        <h3>Create an admin account</h3>
-                        <p>Register securely using the public form below.</p>
+                        <h3>Choose your plan</h3>
+                        <p>Test immediately or ask Data Glean about a paid rollout.</p>
                     </article>
 
                     <article class="step">
                         <div class="step-number">2</div>
-                        <h3>Create workplaces</h3>
-                        <p>Add the sites and premises your organisation manages.</p>
+                        <h3>Set up access</h3>
+                        <p>Test creates an admin now; paid plans begin with one root user.</p>
                     </article>
 
                     <article class="step">
                         <div class="step-number">3</div>
-                        <h3>Onboard guards</h3>
-                        <p>Add guards and prepare their access to the mobile app.</p>
+                        <h3>Build your team</h3>
+                        <p>Root approves admins; admins onboard and approve guards.</p>
                     </article>
 
                     <article class="step">
@@ -1159,27 +1268,59 @@
         <section class="registration" id="register">
             <div class="container registration-grid">
                 <div class="registration-copy">
-                    <div class="eyebrow" style="color:#9fc5ff;">Public registration</div>
-                    <h2>Create your administrator account</h2>
+                    <div class="eyebrow" style="color:#9fc5ff;">Choose how to begin</div>
+                    <h2>Test today or plan your full rollout</h2>
                     <p>
-                        Register your organisation below, then use the same credentials
-                        to sign in to the Security Guard Tracker mobile application.
+                        Start a self-service seven-day test immediately, or tell Data Glean
+                        about your organisation and we will arrange the right paid setup with you.
                     </p>
 
                     <div class="registration-points">
-                        <div class="registration-point"><span class="check">OK</span> Seven-day organisation trial</div>
-                        <div class="registration-point"><span class="check">OK</span> Up to three guards</div>
-                        <div class="registration-point"><span class="check">OK</span> Secure password handling</div>
-                        <div class="registration-point"><span class="check">OK</span> Profile photo included</div>
-                        <div class="registration-point"><span class="check">OK</span> Ready to manage guards and workplaces</div>
+                        <div class="registration-point"><span class="check">OK</span> Test: seven days and up to three guards</div>
+                        <div class="registration-point"><span class="check">OK</span> Beginner: 10 admin and guard users</div>
+                        <div class="registration-point"><span class="check">OK</span> Professional: 50 admin and guard users</div>
+                        <div class="registration-point"><span class="check">OK</span> Premium: unlimited admin and guard users</div>
+                        <div class="registration-point"><span class="check">OK</span> Paid plans include one root user outside the user limit</div>
                     </div>
                 </div>
 
                 <div class="form-card">
-                    <h3>Register as an administrator</h3>
-                    <p class="form-intro">Complete all fields to create your account.</p>
+                    <h3 id="formTitle">Start your seven-day test</h3>
+                    <p class="form-intro" id="formIntro">Test is selected by default. Your administrator account is created immediately.</p>
 
                     <form id="registrationForm" enctype="multipart/form-data">
+                        <div class="plan-picker" role="radiogroup" aria-label="Account plan">
+                            <label class="plan-option selected">
+                                <input type="radio" name="plan_type" value="TEST" checked>
+                                <span class="plan-badge">Default</span>
+                                <strong>Test</strong>
+                                <span>7 days · 3 guards</span>
+                                <small>Immediate self-service administrator access.</small>
+                            </label>
+                            <label class="plan-option">
+                                <input type="radio" name="plan_type" value="BEGINNER">
+                                <strong>Beginner</strong>
+                                <span>10 users</span>
+                                <small>Admins + guards. Root user is not counted.</small>
+                            </label>
+                            <label class="plan-option">
+                                <input type="radio" name="plan_type" value="PROFESSIONAL">
+                                <strong>Professional</strong>
+                                <span>50 users</span>
+                                <small>For established teams and multiple sites.</small>
+                            </label>
+                            <label class="plan-option">
+                                <input type="radio" name="plan_type" value="PREMIUM">
+                                <strong>Premium</strong>
+                                <span>Unlimited users</span>
+                                <small>Scale without an admin or guard user limit.</small>
+                            </label>
+                        </div>
+
+                        <div class="selection-summary" id="selectionSummary">
+                            Your test administrator account will be created now. Root login is not available on test accounts.
+                        </div>
+
                         <div class="form-grid">
                             <div class="form-group full">
                                 <label for="organisation_name">Organisation name</label>
@@ -1218,7 +1359,27 @@
                                 >
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group full paid-only hidden-field">
+                                <label for="phone_number">Phone number</label>
+                                <input
+                                    type="tel"
+                                    id="phone_number"
+                                    name="phone_number"
+                                    autocomplete="tel"
+                                    maxlength="30"
+                                    placeholder="Your best contact number"
+                                >
+                            </div>
+
+                            <div class="form-group full paid-only hidden-field">
+                                <label for="preferred_contact">How should Data Glean contact you?</label>
+                                <select id="preferred_contact" name="preferred_contact">
+                                    <option value="EMAIL">Email</option>
+                                    <option value="PHONE">Phone</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group test-only">
                                 <label for="password">Password</label>
                                 <input
                                     type="password"
@@ -1243,13 +1404,18 @@
                             </div>
                         </div>
 
+                        <label class="consent-row">
+                            <input type="checkbox" id="consent" required>
+                            <span id="consentText">I understand that this test account lasts seven days and supports no more than three guard users.</span>
+                        </label>
+
                         <button type="submit" id="submitButton" class="submit-button">
                             Start seven-day trial
                         </button>
                     </form>
 
                     <div id="message" role="status" aria-live="polite"></div>
-                    <p class="form-note">One private organisation workspace is created for your seven-day trial. Trial access supports up to three guards.</p>
+                    <p class="form-note" id="formNote">We will email confirmation when your test administrator account is created.</p>
                 </div>
             </div>
         </section>
@@ -1266,6 +1432,52 @@
         const form = document.getElementById("registrationForm");
         const message = document.getElementById("message");
         const submitButton = document.getElementById("submitButton");
+        const planInputs = Array.from(document.querySelectorAll('input[name="plan_type"]'));
+        const passwordField = document.getElementById("password");
+        const phoneField = document.getElementById("phone_number");
+        const planCopy = {
+            TEST: {
+                title: "Start your seven-day test",
+                intro: "Your administrator account is created immediately.",
+                summary: "Your test administrator account will be created now. Root login is not available on test accounts.",
+                consent: "I understand that this test account lasts seven days and supports no more than three guard users.",
+                button: "Start seven-day test",
+                note: "We will email confirmation when your test administrator account is created."
+            },
+            BEGINNER: { title: "Ask about Beginner", intro: "Tell us who to contact. We will agree the service before creating your root user.", summary: "Beginner allows 10 admin and guard users in total. Your single root user is not counted.", consent: "I agree that Data Glean may contact me about this Beginner plan enquiry.", button: "Send Beginner enquiry", note: "Submitting an enquiry does not create an account, contract or payment." },
+            PROFESSIONAL: { title: "Ask about Professional", intro: "Tell us who to contact. We will agree the service before creating your root user.", summary: "Professional allows 50 admin and guard users in total. Your single root user is not counted.", consent: "I agree that Data Glean may contact me about this Professional plan enquiry.", button: "Send Professional enquiry", note: "Submitting an enquiry does not create an account, contract or payment." },
+            PREMIUM: { title: "Ask about Premium", intro: "Tell us who to contact. We will agree the service before creating your root user.", summary: "Premium supports unlimited admin and guard users. Your organisation still has one root user.", consent: "I agree that Data Glean may contact me about this Premium plan enquiry.", button: "Send Premium enquiry", note: "Submitting an enquiry does not create an account, contract or payment." }
+        };
+
+        function selectedPlan() {
+            return planInputs.find(input => input.checked)?.value || "TEST";
+        }
+
+        function updatePlanUI() {
+            const plan = selectedPlan();
+            const isTest = plan === "TEST";
+            document.querySelectorAll(".plan-option").forEach(option => {
+                option.classList.toggle("selected", option.querySelector("input").checked);
+            });
+            document.querySelectorAll(".test-only").forEach(element => element.classList.toggle("hidden-field", !isTest));
+            document.querySelectorAll(".paid-only").forEach(element => element.classList.toggle("hidden-field", isTest));
+            passwordField.required = isTest;
+            passwordField.disabled = !isTest;
+            phoneField.required = !isTest;
+            phoneField.disabled = isTest;
+            const copy = planCopy[plan];
+            document.getElementById("formTitle").textContent = copy.title;
+            document.getElementById("formIntro").textContent = copy.intro;
+            document.getElementById("selectionSummary").textContent = copy.summary;
+            document.getElementById("consentText").textContent = copy.consent;
+            document.getElementById("formNote").textContent = copy.note;
+            submitButton.textContent = copy.button;
+            message.className = "";
+            message.style.display = "none";
+        }
+
+        planInputs.forEach(input => input.addEventListener("change", updatePlanUI));
+        updatePlanUI();
 
         form.addEventListener("submit", async function (event) {
             event.preventDefault();
@@ -1276,12 +1488,13 @@
             message.textContent = "";
 
             submitButton.disabled = true;
-            submitButton.textContent = "Creating account...";
+            const plan = selectedPlan();
+            submitButton.textContent = plan === "TEST" ? "Creating test account..." : "Sending enquiry...";
 
             const formData = new FormData(form);
 
             try {
-                const response = await fetch("/register-admin", {
+                const response = await fetch("/register", {
                     method: "POST",
                     body: formData
                 });
@@ -1295,18 +1508,16 @@
 
                 if (response.ok) {
                     registrationSucceeded = true;
-                    const organisation =
-                        result.user && result.user.organisation
-                            ? result.user.organisation
-                            : {};
-                    const organisationName =
-                        organisation.name || "Your organisation";
-
-                    message.textContent =
-                        `Registration successful. ${organisationName} and your ` +
-                        "administrator account have been created. Your seven-day " +
-                        "trial supports up to three guards. You can now sign in " +
-                        "to the Security Guard Tracker mobile application.";
+                    const payload = result.result || {};
+                    if (plan === "TEST") {
+                        const organisationName = payload.organisation?.name || "Your organisation";
+                        const emailNote = payload.email_delivery_status === "SENT"
+                            ? "A confirmation email has been sent."
+                            : `The account is ready; email delivery status is ${payload.email_delivery_status || "unknown"}.`;
+                        message.textContent = `Success. ${organisationName} and your administrator account have been created. ${emailNote} Select Admin in the mobile app to sign in. Your test lasts seven days and supports three guards.`;
+                    } else {
+                        message.textContent = `Thank you. Your ${plan.toLowerCase()} plan enquiry has been received (reference ${payload.id || "saved"}). A Data Glean team member will contact you before any root account is created.`;
+                    }
 
                     message.className = "success";
                     message.style.display = "block";
@@ -1318,11 +1529,11 @@
 
                     form.reset();
 
-                    const inputs = form.querySelectorAll("input");
-                    inputs.forEach(input => input.disabled = true);
+                    const controls = form.querySelectorAll("input, select");
+                    controls.forEach(control => control.disabled = true);
 
                     submitButton.disabled = true;
-                    submitButton.textContent = "✓ Trial Created";
+                    submitButton.textContent = plan === "TEST" ? "✓ Test Account Created" : "✓ Enquiry Sent";
 
                 } else {
                     message.textContent =
@@ -1347,7 +1558,7 @@
             } finally {
                 if (!registrationSucceeded) {
                     submitButton.disabled = false;
-                    submitButton.textContent = "Start seven-day trial";
+                    submitButton.textContent = planCopy[selectedPlan()].button;
                 }
             }
         });
